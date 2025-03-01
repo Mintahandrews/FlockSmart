@@ -20,7 +20,10 @@
     "flocksmart",
     "flutterwave",
     "paystack",
-    "Segoe"
+    "Segoe",
+    "Hackathon",
+    "chartjs",
+    "Agri"
   ],
   "ignorePaths": ["node_modules/**", "dist/**", "build/**", "coverage/**"]
 }
