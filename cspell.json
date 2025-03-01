@@ -2,22 +2,25 @@
   "version": "0.2",
   "language": "en",
   "words": [
+    "Supabase",
+    "VITE",
+    "XVCJ",
+    "Igsyny",
+    "CQTRY",
+    "jlzym",
+    "PGRST",
+    "Squircle",
+    "Gumboro",
+    "Avenir",
+    "TRUNC",
+    "ossp",
     "codemintah",
-    "supabase",
-    "konva",
-    "chartjs",
-    "mpesa",
-    "paystack",
+    "linecap",
+    "linejoin",
+    "flocksmart",
     "flutterwave",
-    "applepay",
-    "ipapi"
+    "paystack",
+    "Segoe"
   ],
-  "ignorePaths": [
-    "node_modules/**",
-    "dist/**",
-    "build/**",
-    "coverage/**",
-    "*.min.*",
-    "package-lock.json"
-  ]
+  "ignorePaths": ["node_modules/**", "dist/**", "build/**", "coverage/**"]
 }

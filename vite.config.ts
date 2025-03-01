@@ -61,11 +61,11 @@ export default defineConfig({
               injectTo: "body",
               children: `
                 const watermark = document.createElement('a');
-                watermark.href = 'https://www.codemintah.dev?a_id=' + encodeURIComponent('0195491a-7860-70af-ac13-773fe819b5f9');
+                watermark.href = 'https://www.codemintah.com?a_id=' + encodeURIComponent('01954922-702d-7fa3-af26-461194a83d3d');
                 watermark.target = '_blank';
                 watermark.className = 'codemintah-watermark';
                 watermark.innerHTML = \`
-                  <img src="https://assets.codemintah.dev/favicon.svg" alt="codemintah Logo" />
+                  <img src="https://assets.codemintah.com/favicon.svg" alt="codemintah Logo" />
                   Made in codemintah
                 \`;
                 document.body.appendChild(watermark);

@@ -1,105 +1,161 @@
-import { useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
-import DesktopSidebar from './components/navigation/DesktopSidebar';
-import MobileNavigation from './components/navigation/MobileNavigation';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import SeekerDashboard from './pages/SeekerDashboard';
-import ProviderDashboard from './pages/ProviderDashboard';
-import Profile from './pages/Profile';
-import ServiceList from './pages/services/ServiceList';
-import CreateService from './pages/services/CreateService';
-import MessageList from './pages/messages/MessageList';
-import Conversation from './pages/messages/Conversation';
-import AcademicIntegrity from './pages/AcademicIntegrity';
-import ResourceLibrary from './pages/learning/ResourceLibrary';
-import StudyGroups from './pages/learning/StudyGroups';
-import Achievements from './pages/learning/Achievements';
-import Wallet from './pages/payments/Wallet';
-import TutorDirectory from './pages/tutors/TutorDirectory';
-import TutorProfile from './pages/tutors/TutorProfile';
-import ErrorBoundary from './components/common/ErrorBoundary';
-import { Toaster } from 'react-hot-toast';
-import './index.css';
+import { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { checkOverdueVaccinations } from "./utils";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { useSupabaseData } from "./hooks/useSupabaseData";
+import Layout from "./components/Layout";
+import Dashboard from "./pages/Dashboard";
+import FlockHealth from "./pages/FlockHealth";
+import FeedManagement from "./pages/FeedManagement";
+import Production from "./pages/Production";
+import MortalityTracker from "./pages/MortalityTracker";
+import VaccinationSchedule from "./pages/VaccinationSchedule";
+import FinancialDashboard from "./pages/FinancialDashboard";
+import FlockManagement from "./pages/FlockManagement";
+import AIAssistant from "./components/AIAssistant";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Account from "./pages/Account";
+import Pricing from "./pages/Pricing";
+import PaymentMethods from "./pages/PaymentMethods";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
-function App() {
-  const { user, loading } = useAuth();
+import "./index.css";
+
+// Protected route component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="loading-spinner"></div>
+        <span className="ml-3 text-gray-700">Loading...</span>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const AuthenticatedApp = () => {
+  const { data, setData, isLoading } = useSupabaseData();
+  const [notificationCount, setNotificationCount] = useState(0);
+  const { user } = useAuth();
 
   useEffect(() => {
-    // Include required font
-    const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap';
-    link.rel = 'stylesheet';
+    // Load Google Fonts
+    const link = document.createElement("link");
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap";
+    link.rel = "stylesheet";
     document.head.appendChild(link);
-
-    return () => {
-      document.head.removeChild(link);
-    };
   }, []);
 
-  if (loading) {
+  useEffect(() => {
+    // Update notification count
+    if (data) {
+      const unreadAlerts = data.healthAlerts.filter(
+        (alert) => !alert.isRead
+      ).length;
+      const overdueVaccinations = checkOverdueVaccinations(data);
+      setNotificationCount(unreadAlerts + overdueVaccinations);
+    }
+  }, [data]);
+
+  if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+      <div className="flex items-center justify-center h-screen">
+        <div className="loading-spinner"></div>
+        <span className="ml-3 text-gray-700">Loading your data...</span>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      <DesktopSidebar />
-      <MobileNavigation />
-      
-      <main className="lg:ml-64 min-h-screen">
-        <div className="container mx-auto px-4 py-8">
-          <ErrorBoundary>
-            <Routes>
-              <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-              <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
-              <Route 
-                path="/dashboard" 
-                element={
-                  user ? (
-                    user.role === 'seeker' ? <SeekerDashboard /> : <ProviderDashboard />
-                  ) : <Navigate to="/login" />
-                } 
-              />
-              <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
-              <Route path="/services" element={<ServiceList />} />
-              <Route path="/services/create" element={user ? <CreateService /> : <Navigate to="/login" />} />
-              <Route path="/messages" element={user ? <MessageList /> : <Navigate to="/login" />} />
-              <Route path="/messages/:userId" element={user ? <Conversation /> : <Navigate to="/login" />} />
-              <Route path="/academic-integrity" element={<AcademicIntegrity />} />
-              <Route path="/resources" element={user ? <ResourceLibrary /> : <Navigate to="/login" />} />
-              <Route path="/study-groups" element={user ? <StudyGroups /> : <Navigate to="/login" />} />
-              <Route path="/achievements" element={user ? <Achievements /> : <Navigate to="/login" />} />
-              <Route path="/wallet" element={user ? <Wallet /> : <Navigate to="/login" />} />
-              <Route path="/tutors" element={<TutorDirectory />} />
-              <Route path="/tutors/:id" element={<TutorProfile />} />
-              <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </ErrorBoundary>
-        </div>
-      </main>
-      
-      <Toaster 
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: '#fff',
-            color: '#363636',
-            border: '1px solid #e2e8f0',
-            paddingLeft: '16px',
-            paddingRight: '16px',
-          }
-        }}
-        // Prevent duplicate toasts
-        gutter={8}
-      />
+    <div className="flex flex-col h-full">
+      <div className="flex-1 flex overflow-hidden">
+        <Routes>
+          <Route
+            path="/"
+            element={<Layout notificationCount={notificationCount} />}
+          >
+            <Route
+              index
+              element={<Dashboard data={data} setData={setData} />}
+            />
+            <Route
+              path="flocks"
+              element={<FlockManagement data={data} setData={setData} />}
+            />
+            <Route
+              path="health"
+              element={<FlockHealth data={data} setData={setData} />}
+            />
+            <Route
+              path="feed"
+              element={<FeedManagement data={data} setData={setData} />}
+            />
+            <Route
+              path="production"
+              element={<Production data={data} setData={setData} />}
+            />
+            <Route
+              path="mortality"
+              element={<MortalityTracker data={data} setData={setData} />}
+            />
+            <Route
+              path="vaccinations"
+              element={<VaccinationSchedule data={data} setData={setData} />}
+            />
+            <Route
+              path="financial"
+              element={<FinancialDashboard data={data} setData={setData} />}
+            />
+            <Route path="account" element={<Account />} />
+            <Route path="pricing" element={<Pricing />} />
+            <Route path="payment-methods" element={<PaymentMethods />} />
+            <Route path="payment-success" element={<PaymentSuccess />} />
+
+            {/* Catch all route - redirect to dashboard */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </div>
+      {user &&
+        (user.subscription === "premium" ||
+          user.subscription === "enterprise") && <AIAssistant data={data} />}
     </div>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <AuthenticatedApp />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
+    </Router>
   );
 }
 
