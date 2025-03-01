@@ -23,7 +23,12 @@
     "Segoe",
     "Hackathon",
     "chartjs",
-    "Agri"
+    "Agri",
+    "Mintah",
+    "Mintahandrews",
+    "Zakaria",
+    "Sisu",
+    "zakariasisu"
   ],
   "ignorePaths": ["node_modules/**", "dist/**", "build/**", "coverage/**"]
 }

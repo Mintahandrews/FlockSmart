@@ -5,7 +5,7 @@
 FlockSmart is an innovative, AI-driven poultry management solution developed during the Hackathon 2025. Our platform revolutionizes poultry farming by providing smart insights, automated monitoring, and data-driven decision-making tools.
 
 <div align="center">
-  <img src="public/favicon.ico" alt="FlockSmart Logo" width="200" height="200" />
+  <img src="public/temp.svg" alt="FlockSmart Logo" width="200" height="200" />
 </div>
 
 ## 🌟 Key Features
