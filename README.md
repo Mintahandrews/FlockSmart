@@ -48,3 +48,21 @@ FlockSmart is an innovative, AI-driven poultry management solution developed dur
 ### 6. Smart Insights
 
 - AI-generated recommendations
+- 
+  ### 7 Data Insights
+AI-generated comprehensive reports on flock health, feed consumption, egg production, sales, and expenses.
+
+### 8. Sales Tracking: 
+Monitor sales trends and identify potential market opportunities.
+
+### 9. Offline Access
+Manage your farm effectively even without an internet connection.
+
+### 10. Reminders/Notifications
+Set up personalized reminders and notifications for critical tasks and deadlines.
+
+### 11. Data Backup and Restore
+Securely backup your data to your preferred cloud storage for peace of mind.
+
+### 12 Multi-Device Sharing
+Seamlessly share data across multiple devices for collaborative management.
